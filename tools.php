@@ -1,0 +1,86 @@
+<?php
+    // 회원 가입과 로그인 모듈을 위한 상수
+    define("MAIN_PAGE", "main.php");
+    define("MEMBER_PATH", ".");
+
+    // 세션이 시작되지 않았을 경우 세션을 시작하는 함수
+    function session_start_if_none() {
+        if(session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+    }
+
+    // GET/POST로 전달된 값을 읽어 반환하는 함수
+    // 해당 값이 정의되지 않았으면 빈 문자열을 반환
+    function requestValue($name) {
+        return isset($_REQUEST[$name]) ? $_REQUEST[$name] : "";
+    }
+
+    // 세션변수 값을 읽어 반환하는 함수
+    // 해당 값이 정의되지 않았으면 빈 문자열을 반환
+    function sessionVar($name) {
+        return isset($_SESSION[$name]) ? $_SESSION[$name] : "";
+    }
+
+    // 지시된 URL로 이동하는 함수
+    // 이 함수 호출 뒤에 있는 코드는 실행되지 않음
+    function goNow($url) {
+        header("Location: $url");
+        exit();
+    }
+
+    // 경고창에 오류 메시지를 출력하고 이전 페이지로 돌아가는 함수
+    function errorBack($msg) {
+?>
+        <!doctype html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+        </head>
+        <body>
+        <script>
+            alert('<?= $msg ?>');
+            history.back();
+        </script>
+
+        </body>
+        </html>
+<?php
+        exit();
+    }
+    
+    // 지정된 세션변수 값을 읽어줌
+    function readSessionVar() {
+        // 세션이 시작되지 않았으면 start_session() 실행
+        // 지정된 세션변수의 값을 읽어 반환
+        // 이 함수가 있으면 다른 프로그램에서 따로 session_start_if_none()을 호출할 필요 없음.
+        
+        if(session_status() == PHP_SESSION_NONE) {
+            session_start();
+        }
+
+        $id = sessionVar("uid");
+        $name = sessionVar("uname");
+
+        return array($id, $name);
+    }
+
+    // 경고창에 지정된 메시지를 출력하고 지정된 페이지로 이동하는 함수
+    function okGo($msg, $url) {
+?>
+        <!doctype html>
+        <html>
+        <head>
+            <meta charset="utf-8">
+        </head>
+        <body>
+        <script>
+            alert('<?= $msg ?>');
+            location.href='<?= $url ?>';
+        </script>
+        </body>
+        </html>
+<?php
+        exit();
+    }
+?>
