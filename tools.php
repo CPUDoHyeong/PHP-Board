@@ -1,7 +1,26 @@
 <?php
+
     // 회원 가입과 로그인 모듈을 위한 상수
-    define("MAIN_PAGE", "main.php");
+    define("MAIN_PAGE", "board.php");
     define("MEMBER_PATH", ".");
+
+    // 게시판 모듈의 URL을 반환하는 함수
+    function bdUrl($file, $num, $page) {
+        $join = "?";
+        // 만약 num이 있다면 물음표 뒤에 num=$num을 넣어준다
+        // ex) $file로 view.php, $num으로 11 $page로 3을 받았다면
+        // view.php?num=11 로 바꿔준다.
+        // .= 을 사용하면 $file = $file.$join과 같은 의미이다.
+        if($num) {
+            $file .= $join . "num=$num";
+            $join = "&";
+        }
+        if($page) {
+            $file .= $join . "page=$page";
+        }
+
+        return $file;
+    }
 
     // 세션이 시작되지 않았을 경우 세션을 시작하는 함수
     function session_start_if_none() {
@@ -48,22 +67,6 @@
 <?php
         exit();
     }
-    
-    // 지정된 세션변수 값을 읽어줌
-    function readSessionVar() {
-        // 세션이 시작되지 않았으면 start_session() 실행
-        // 지정된 세션변수의 값을 읽어 반환
-        // 이 함수가 있으면 다른 프로그램에서 따로 session_start_if_none()을 호출할 필요 없음.
-        
-        if(session_status() == PHP_SESSION_NONE) {
-            session_start();
-        }
-
-        $id = sessionVar("uid");
-        $name = sessionVar("uname");
-
-        return array($id, $name);
-    }
 
     // 경고창에 지정된 메시지를 출력하고 지정된 페이지로 이동하는 함수
     function okGo($msg, $url) {
@@ -83,4 +86,5 @@
 <?php
         exit();
     }
+
 ?>
